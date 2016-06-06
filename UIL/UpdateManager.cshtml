@@ -1,0 +1,24 @@
+﻿@using Zhbit.HealthSystem.BLL
+@using Zhbit.HealthSystem.DAL
+@using Zhbit.HealthSystem.Model
+@using Zhbit.HealthSystem.SFL
+@{
+    Manager mg = new Manager();
+    if (Request.Form["id"] != null)
+    {  mg.Id = int.Parse(Request.Form["id"]); }
+    if (Request.Form["username"] != null)
+    {  mg.Name = Request.Form["username"];    }
+    if(Request.Form["role"]!=null)
+    { mg.Role = Request.Form["role"]; }
+    if(Request.Form["loginname"]!=null)
+    { mg.LoginName = Request.Form["loginname"]; }
+    if(Request.Form["newpassword"]!=null)
+    { mg.Password = Request.Form["newpassword"]; }
+    int re = 0;
+    if(mg.Id!=null)
+    {
+      re= ManagerBLL.Update(mg);
+    }
+
+}
+@re

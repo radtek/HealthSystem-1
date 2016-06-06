@@ -1,0 +1,5 @@
+﻿@{
+    ResidentBasicManagementDATAJSON rmd = new ResidentBasicManagementDATAJSON();
+    string result = "{\"total\":\"" + rmd.dataToJson().count + "\",\"rows\":" + rmd.dataToJson().data + "}";
+    Response.Write(result);
+}

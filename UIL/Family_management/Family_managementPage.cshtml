@@ -1,0 +1,243 @@
+﻿@{
+    Layout = "~/_SiteLayout.cshtml";
+    Page.title = "家庭管理";
+
+}
+<script src="~/Scripts/bootstrap-table-zh-CN.js"></script>
+<div class="main-content-inner">
+
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }</script>
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="#">主页</a>
+            </li>
+            <li class="active">家庭管理</li>
+        </ul>
+        <!-- /.breadcrumb -->
+        <!-- <div class="nav-search" id="nav-search">
+            <form class="form-search">
+                <span class="input-icon">
+                    <input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" /> <i class="ace-icon fa fa-search nav-search-icon"></i>
+                </span>
+            </form>
+        </div> -->
+        <!-- /.nav-search -->
+    </div>
+    <div class="page-content">
+        <!-- ace-settings-container -->
+        <div class="ace-settings-container" id="ace-settings-container">
+            <div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
+                <i class="ace-icon fa fa-cog bigger-130"></i>
+            </div>
+            <div class="ace-settings-box clearfix" id="ace-settings-box">
+                <div class="pull-left width-50">
+                    <div class="ace-settings-item">
+                        <div class="pull-left">
+                            <select id="skin-colorpicker" class="hide">
+                                <option data-skin="no-skin" value="#438EB9">#438EB9</option>
+                                <option data-skin="skin-1" value="#222A2D">#222A2D</option>
+                                <option data-skin="skin-2" value="#C6487E">#C6487E</option>
+                                <option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
+                            </select>
+                        </div>
+                        <span>&nbsp; Choose Skin</span>
+                    </div>
+                    <div class="ace-settings-item">
+                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-navbar" />
+                        <label class="lbl" for="ace-settings-navbar">Fixed Navbar</label>
+                    </div>
+                    <div class="ace-settings-item">
+                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-sidebar" />
+                        <label class="lbl" for="ace-settings-sidebar">Fixed Sidebar</label>
+                    </div>
+                    <div class="ace-settings-item">
+                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-breadcrumbs" />
+                        <label class="lbl" for="ace-settings-breadcrumbs">Fixed Breadcrumbs</label>
+                    </div>
+                    <div class="ace-settings-item">
+                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-rtl" />
+                        <label class="lbl" for="ace-settings-rtl">Right To Left (rtl)</label>
+                    </div>
+                    <div class="ace-settings-item">
+                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-add-container" />
+                        <label class="lbl" for="ace-settings-add-container">
+                            Inside <b>.container</b>
+                        </label>
+                    </div>
+                </div>
+                <!-- /.pull-left -->
+                <div class="pull-left width-50">
+                    <div class="ace-settings-item">
+                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-hover" />
+                        <label class="lbl" for="ace-settings-hover">Submenu on Hover</label>
+                    </div>
+                    <div class="ace-settings-item">
+                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-compact" />
+                        <label class="lbl" for="ace-settings-compact">Compact Sidebar</label>
+                    </div>
+                    <div class="ace-settings-item">
+                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-highlight" />
+                        <label class="lbl" for="ace-settings-highlight">Alt. Active Item</label>
+                    </div>
+                </div>
+                <!-- /.pull-left -->
+            </div>
+            <!-- /.ace-settings-box -->
+        </div>
+        <!-- /.ace-settings-container -->
+        <!--page-header-->
+        <div class="page-header">
+            <h1>
+                家庭管理
+                <small>
+                    <i class="ace-icon fa fa-angle-double-right"></i>
+                    视图 &amp; 数据统计
+                </small>
+            </h1>
+        </div>
+        <!-- /.page-header -->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- PAGE CONTENT BEGINS -->
+                <!-- PAGE CONTENT ENDS -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-md-12">
+                <div id="toolbar">
+                    <button id="PlatformDeleteBtn" class="btn btn-default">Delete</button>
+                    <button id="PlatformAddBtn" class="btn btn-default" tabindex="-1" data-toggle="modal" data-target="#addModal">add</button>
+                </div>
+                <table id="DoctorManagementTable"></table>
+            </div>
+        </div>
+    </div>
+    <!-- /.page-content -->
+
+</div>
+<script>
+    $(function () {
+        var count = 0
+        function rowStyle(row, index) {
+            var classes = ['active', 'success', 'info', 'warning', 'danger']
+
+            if (index % 2 === 0) {
+                count++
+                if (count >= classes.length) {
+                    count = 0
+                }
+                return {
+                    classes: classes[count]
+                }
+            }
+            return {}
+        }
+
+        $('#DoctorManagementTable').bootstrapTable({
+            url: "GetFamilys.ashx",
+            pagination: true,
+            pageSize: 4,
+            sidePagination: 'server',
+            pageList: [5, 10, 'ALL'],
+            search: true,
+            mobileResponsive: true,
+            striped: true,
+            rowStyle: rowStyle,
+            showColumns: true,
+            showRefresh: true,
+            showToggle: true,
+            showPaginationSwitch: true,
+            clickToSelect: true,
+            showExport: true,
+            exportTypes: ['json', 'xml', 'csv', 'txt', 'sql', 'doc', 'excel'],
+
+            //    /// <summary>[属性]家庭档案号</summary>
+            //        public int? Id
+
+            ///// <summary>[属性]家庭名称</summary>
+            //        public string Name
+
+            ///// <summary>[属性]户主</summary>
+            //public string Owner
+
+            ///// <summary>[属性]家庭类型</summary>
+            //public int? FamilyType
+
+            ///// <summary>[属性]住房类型</summary>
+            //public int? HousingTypes
+
+            ///// <summary>[属性]家庭总人数</summary>
+            //public int? Total
+
+            ///// <summary>[属性]负责老人数</summary>
+            //public int? Old
+
+            ///// <summary>[属性]责任医生</summary>
+            //public string ResponsibleDoctor
+
+            ///// <summary>[属性]创建日期</summary>
+            //public DateTime? CreateDate
+
+            ///// <summary>[属性]管理机构</summary>
+            //public Institutions ManageInstitutions
+
+            ///// <summary>[属性]备注</summary>
+            //public string Remark
+
+            columns: [{
+                field: 'Id',
+                title: '家庭档案号',
+                visible: true,//不可见，工具栏可见
+                switchable: true,//都不见
+                align: 'center'
+            }, {
+                field: 'Name',
+                title: '家庭名称',
+                align: 'center'
+            }, {
+                field: 'Owner',
+                title: '户主',
+                align: 'center'
+            }, {
+                field: 'FamilyType',
+                title: '家庭类型',
+                align: 'center'
+            }, {
+                field: 'HousingTypes',
+                title: '住房类型',
+                align: 'center'
+            }, {
+                field: 'Total',
+                title: '家庭总人数',
+                align: 'center'
+            }, {
+                field: 'Old',
+                title: '负责老人数',
+                align: 'center'
+            }, {
+                field: 'ResponsibleDoctor',
+                title: '责任医生',
+                align: 'center'
+            }, {
+                field: 'CreateDate',
+                title: '创建日期',
+                align: 'center'
+            }, {
+                field: 'ManageInstitutions',
+                title: '管理机构',
+                align: 'center'
+            }, {
+                field: 'Remark',
+                title: '备注',
+                align: 'center'
+            }],
+
+        })
+
+
+    })
+</script>

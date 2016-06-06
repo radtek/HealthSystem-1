@@ -1,0 +1,5 @@
+﻿@{
+    AdministratorSettingsDATAJSON adj = new AdministratorSettingsDATAJSON();
+    string result = "{\"total\":\"" + adj.dataToJson().count + "\",\"rows\":" + adj.dataToJson().data + "}";
+    Response.Write(result);
+}

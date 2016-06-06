@@ -1,0 +1,5 @@
+﻿@{
+    BasicExamDATAJSON bed = new BasicExamDATAJSON();
+    string result = "{\"total\":\"" + bed.dataToJson().count + "\",\"rows\":" + bed.dataToJson().data + "}";
+    Response.Write(result);
+}

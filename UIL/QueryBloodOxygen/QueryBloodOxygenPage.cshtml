@@ -1,0 +1,518 @@
+﻿@{
+    Layout = "~/_SiteLayout.cshtml";
+}
+
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<script src="~/Scripts/bootstrap-table.js"></script>
+<!-- put your locale files after bootstrap-table.js -->
+<script src="~/Scripts/bootstrap-table-zh-CN.js"></script>
+
+
+
+<link rel="stylesheet" href="~/Content/bootstrap-table.css">
+
+<link rel="stylesheet" href="~/Content/jquery-ui.min.css" />
+<link rel="stylesheet" href="~/Content/jquery-ui.theme.min.css" />
+<link rel="stylesheet" href="~/Content/jquery-ui-timepicker-addon.min.css" />
+<script src="~/Scripts/jquery-ui.min.js"></script>
+<script src="~/Scripts/jquery-ui-timepicker-addon.min.js"></script>
+
+<script src="~/Scripts/echarts-all-3.0.0.js"></script>
+
+<div class="main-content-inner">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }</script>
+
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="#">主页</a>
+            </li>
+            <li class="active">血氧数据</li>
+        </ul>
+        <!-- /.breadcrumb -->
+        <!-- 	<div class="nav-search" id="nav-search">
+                <form class="form-search">
+                    <span class="input-icon">
+                        <input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" /> <i class="ace-icon fa fa-search nav-search-icon"></i>
+                    </span>
+                </form>
+            </div> -->
+        <!-- /.nav-search -->
+    </div>
+
+    <div class="page-content">
+        <include file="Public:aceSetting" />
+        <!-- /.ace-settings-container -->
+
+        <div class="page-header">
+            <h1>
+                血氧数据
+                <small>
+                    <i class="ace-icon fa fa-angle-double-right"></i>
+                    视图 &amp; 数据统计
+                </small>
+            </h1>
+        </div>
+        <!-- /.page-header -->
+
+        <div class="row">
+            <div class="col-md-12">
+                <!-- PAGE CONTENT BEGINS -->
+                <!-- PAGE CONTENT ENDS -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+
+        <div class="row">
+            <div class="col-md-12">
+                <div id="toolbar">
+                    <form class="form-horizontal">
+                        <div class="form-group" style="padding-left:15px;">
+                            <input type="text" name="range_example_1_start" id="range_example_1_start" class="time" value="" />
+                            <input type="text" name="range_example_1_end" id="range_example_1_end" class="time" value="" />
+                        </div>
+                    </form>
+                </div>
+                <table id="BloodOxygenTable"></table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-header"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="" class="label_front_weight" style="padding-left:15px;">姓名:</label>
+                        <label for="" class="label_front_weight" id="toShowName"></label>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="label_front_weight" style="padding-left:15px;">时间:</label>
+                        <label for="" class="label_front_weight" id="toShowTime"></label>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12" style="width: 100%; height: 450px; margin: 0">
+                <div id="BloodOxygenChart" style="width: 100%; height: 100%"></div>
+            </div>
+        </div>
+        <div class="row">
+        <div class="col-md-12" style="width: 100%; height: 450px; margin: 0">
+            <div id="BloodOxygenChart2" style="width: 100%; height: 100%"></div>
+        </div>
+    </div>
+       
+    </div>
+    <!-- /.page-content -->
+</div>
+
+<script>
+    $(function () {
+
+        ////for timepicker
+        var startDateTextBox = $('#range_example_1_start')
+        var endDateTextBox = $('#range_example_1_end')
+        var startTime = '',endTime = '',dataUser = ''
+
+        startDateTextBox.datetimepicker({
+            timeFormat: 'HH:mm:ss',
+            // timeFormat: 'HH:mm z',
+            onClose: function(dateText, inst) {
+                if (endDateTextBox.val() != '') {
+                    var testStartDate = startDateTextBox.datetimepicker('getDate')
+                    var testEndDate = endDateTextBox.datetimepicker('getDate')
+                    if (testStartDate > testEndDate)
+                        endDateTextBox.datetimepicker('setDate', testStartDate)
+                } else {
+                    endDateTextBox.val(dateText)
+                }
+
+                if(startDateTextBox.val() != ''){
+                    startTime = startDateTextBox.datetimepicker('getDate').getTime().toString().substr(0, 10)
+                }
+                console.log('startTime:' + startTime)
+            },
+            onSelect: function(selectedDateTime) {
+                endDateTextBox.datetimepicker('option', 'minDate', startDateTextBox.datetimepicker('getDate'))
+            }
+        })
+
+        endDateTextBox.datetimepicker({
+            // timeFormat: 'HH:mm z',
+            timeFormat: 'HH:mm:ss',//必须HH,不能hh,否则时间不能从0开始
+            onClose: function(dateText, inst) {
+                if (startDateTextBox.val() != '') {
+                    var testStartDate = startDateTextBox.datetimepicker('getDate')
+                    var testEndDate = endDateTextBox.datetimepicker('getDate')
+                    if (testStartDate > testEndDate)
+                        startDateTextBox.datetimepicker('setDate', testEndDate)
+                } else {
+                    startDateTextBox.val(dateText)
+                }
+
+                if(endDateTextBox.val() != ''){
+                    endTime = endDateTextBox.datetimepicker('getDate').getTime().toString().substr(0, 10)
+                }
+
+                console.log('endTime:' + endTime)
+            },
+            onSelect: function(selectedDateTime) {
+                startDateTextBox.datetimepicker('option', 'maxDate', endDateTextBox.datetimepicker('getDate'))
+            }
+        })
+
+        //这个必须放在bootstrapTable设置之上
+        window.operateEvents = {
+            'click .like': function (e, value, row, index) {
+                // alert('You click like action, row: ' + JSON.stringify(row))
+                $("#toShowName").text(row.Name)
+                dataUser = row.Name
+                if(startDateTextBox.val()!='' && endDateTextBox.val()!=''){
+                    $("#toShowTime").text(startDateTextBox.val()+'   '+'To'+'   '+endDateTextBox.val())
+                }else{
+                    $("#toShowTime").text('全部')
+                }
+                dataAjax()//调用数据绘图
+                console.log('row+startTime+endTime')
+                console.log(row.user)
+                console.log(startTime)
+                console.log(endTime)
+            }
+            // 'click .remove': function (e, value, row, index) {
+            //     $table.bootstrapTable('remove', {
+            //         field: 'id',
+            //         values: [row.id]
+            //     })
+            // }
+        }
+
+        //for usrtable
+        $('#BloodOxygenTable').bootstrapTable({
+            url: 'GetBloodOxgenTable.ashx',
+            pagination: true,
+            pageSize: 4,
+            sidePagination: 'server',
+            pageList: [5, 10, 'ALL'],
+            search: true,
+            mobileResponsive: true,
+            toolbar:'#toolbar',
+            queryParamsType: "limit",//查询参数组织方式
+            queryParams: function getParams(params) {
+                // params['gugu'] = testgugu
+                console.log(params)
+                return params;
+            },
+            striped: true,
+            // rowStyle: rowStyle,
+            // showColumns: true,
+            showRefresh: true,
+            // showToggle: true,
+
+            showPaginationSwitch: true,
+            clickToSelect: true,
+            columns: [{
+                field: 'Id',
+                title: '编号',
+                visible: false,//不可见，工具栏可见
+                switchable: false,//都不见
+                align: 'center'
+            }, {
+                field: 'Checkdate',
+                title: '检查日期',
+                align: 'center'
+            }, {
+                field: 'Name',
+                title: '姓名',
+                editable: true,
+                align: 'center'
+                         
+            }, {
+                field: 'Sex',
+                title: '性别',
+                editable: true,
+                align: 'center'
+            }, {
+                field: 'Age',
+                title: '年龄',
+                editable: true,
+                align: 'center'
+            }, {
+                field: 'Hosname',
+                title: '医院',
+                editable: true,
+                align: 'center'
+            }, {
+                field: 'Data Plotting',
+                title: '数据展示',
+                align: 'center',
+                events: operateEvents,
+                formatter: operateFormatter
+            }],
+           
+        })
+
+
+            function operateFormatter(value, row, index) {
+                return ['<button type="button" class="btn btn-default like">','Plotting</button>',
+                    // '<a class="like" href="javascript:void(0)" title="Data Plotting">',
+                    // '<span class="glyphicon glyphicon-picture"></span>',
+                    // '</a>'
+                ].join('');
+            }
+
+        //    //绘图数据js代码开始
+            var BloodOxygenChart = echarts.init(document.getElementById('BloodOxygenChart'))
+            var BloodOxygenChart2 = echarts.init(document.getElementById('BloodOxygenChart2'))
+        //    // 指定图表的配置项和数据
+            var BloodOxygenChartOption = {
+                title: {
+                    text: '血氧饱和度图'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['上限', '数值', '下限']
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: [0]
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        max: 200,
+                        min: 0,
+                        splitNumber: 10,
+                        name: ''
+                    }
+                ],
+                series: [
+                    {
+                        name: '上限',
+                        type: 'line',
+                        stack: '总量',
+                        areaStyle: { normal: {} },
+                        data: [0]
+                    },
+                    {
+                        name: '数值',
+                        type: 'line',
+                        stack: '总量',
+                        areaStyle: { normal: {} },
+                        data: [0]
+                    },
+                    {
+                        name: '下限',
+                        type: 'line',
+                        stack: '总量',
+                        areaStyle: { normal: {} },
+                        data: [0]
+                    }
+                    //{
+                    //    name: '直接访问',
+                    //    type: 'line',
+                    //    stack: '总量',
+                    //    areaStyle: { normal: {} },
+                    //    data: [320, 332, 301, 334, 390, 330, 320]
+                    //},
+                    //{
+                    //    name: '搜索引擎',
+                    //    type: 'line',
+                    //    stack: '总量',
+                    //    label: {
+                    //        normal: {
+                    //            show: true,
+                    //            position: 'top'
+                    //        }
+                    //    },
+                    //    areaStyle: { normal: {} },
+                    //    data: [820, 932, 901, 934, 1290, 1330, 1320]
+                    //}
+                ]
+            }
+
+
+            var BloodOxygenChartOption2 = {
+                title: {
+                    text: '脉率（血氧）图'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['上限', '数值', '下限']
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: [0]
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        max: 200,
+                        min: 0,
+                        splitNumber: 10,
+                        name:''
+
+                    }
+                ],
+                series: [
+                    {
+                        name: '上限',
+                        type: 'line',
+                        stack: '总量',
+                        areaStyle: { normal: {} },
+                        data: [0]
+                    },
+                    {
+                        name: '数值',
+                        type: 'line',
+                        stack: '总量',
+                        areaStyle: { normal: {} },
+                        data: [0]
+                    },
+                    {
+                        name: '下限',
+                        type: 'line',
+                        stack: '总量',
+                        areaStyle: { normal: {} },
+                        data: [0]
+                    }
+                 
+                ]
+            }
+      
+
+       
+        //    // 使用刚指定的配置项和数据显示图表。
+            //heartChart.setOption(heartOption)
+            //bloodChart.setOption(bloodOption)
+            //respirationChart.setOption(respirationOption)
+            //temperatureChart.setOption(temperatureOption)
+            //heightweightChart.setOption(heightweightOption)
+        //bmiChart.setOption(bmiOption)
+            BloodOxygenChart.setOption(BloodOxygenChartOption)
+            BloodOxygenChart2.setOption(BloodOxygenChartOption2)
+
+
+            function dataAjax() {
+                $.ajax({
+                    url: 'GetBloodOxygenData.ashx',
+                    type: 'get',
+                    data:'startTime=' + startTime + '&endTime=' + endTime + '&dataUser=' + dataUser,
+                    dataType: 'json'
+                }).done(function(data, status, jqXHR) {
+                    // 填入数据
+                    console.log(data)
+                    // console.log(data[0].diastolic_pressure)
+                    //心跳数据填入
+                  
+                  
+                    BloodOxygenChart.setOption({
+                        series: [{
+                            data: data.yang.srange,
+                        }, {
+                            data: data.yang.bloodoxygenvalue,
+                        }, {
+                            data: data.yang.lrange,
+                        }]
+                    })
+                   
+                    BloodOxygenChart2.setOption({
+                        series: [{
+                            data: data.xue.srange,
+                        }, {
+                            data: data.xue.bloodoxygenvalue,
+                        }, {
+                            data: data.xue.lrange,
+                        }]
+                    })
+        //            //睡眠状态
+        //            sleepStateChart.setOption({
+        //                series: [{
+        //                    // data: data.data
+        //                    data: [{
+        //                        value: data.sleep.sleep_state.deepSleep,
+        //                        name: '深睡'
+        //                    }, {
+        //                        value: data.sleep.sleep_state.lightSleep,
+        //                        name: '浅睡'
+        //                    }, {
+        //                        value: data.sleep.sleep_state.awake,
+        //                        name: '醒着'
+        //                    }],
+        //                }]
+        //            })
+        //            //翻身次数
+        //            turnOverTimesChart.setOption({
+        //                series: [{
+        //                    data:data.sleep.turn_over_times,
+        //                }]
+        //            })
+        //            //运动状态
+        //            sportChart.setOption({
+        //                series: [{
+        //                    // data: data.data
+        //                    data: [{
+        //                        value: data.sport.sport_state.static,
+        //                        name: '静止'
+        //                    }, {
+        //                        value: data.sport.sport_state.rest,
+        //                        name: '休息'
+        //                    }, {
+        //                        value: data.sport.sport_state.walk,
+        //                        name: '走路'
+        //                    },{
+        //                        value: data.sport.sport_state.run,
+        //                        name: '跑步'
+        //                    }],
+        //                }]
+        //            })
+        //        }).fail(function(){
+        //            console.log('获取数据失败')
+                })
+            }
+
+        //    //心跳数据js代码结束
+    })
+
+
+</script>

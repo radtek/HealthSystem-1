@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0AB28C3E-8E70-4CE2-83F5-4FD28150BCB1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Zhbit.HealthSystem.Model</RootNamespace>
+    <AssemblyName>Model</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Doctor.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PageData.cs" />
+    <Compile Include="Resident.cs" />
+    <Compile Include="ResidentDiseaseInfo.cs" />
+    <Compile Include="Family.cs" />
+    <Compile Include="Institutions.cs" />
+    <Compile Include="Manager.cs" />
+    <Compile Include="T_Sex.cs" />
+    <Compile Include="BloodOxygen.cs" />
+    <Compile Include="Pressure.cs" />
+    <Compile Include="Temperature.cs" />
+    <Compile Include="T_Check_Flag.cs" />
+    <Compile Include="T_Status.cs" />
+    <Compile Include="BasicExamination.cs" />
+    <Compile Include="T_Symptoms.cs" />
+    <Compile Include="T_EatingHabits.cs" />
+    <Compile Include="AdvancedExamination.cs" />
+    <Compile Include="MajorProblems.cs" />
+    <Compile Include="T_CBC.cs" />
+    <Compile Include="T_RoutineUrine.cs" />
+    <Compile Include="T_Liver.cs" />
+    <Compile Include="T_Renal.cs" />
+    <Compile Include="T_TG.cs" />
+    <Compile Include="T_Physical.cs" />
+    <Compile Include="T_CerebrovascularDisease.cs" />
+    <Compile Include="T_KidneyDisease.cs" />
+    <Compile Include="T_HeartDisease.cs" />
+    <Compile Include="T_VascularDisease.cs" />
+    <Compile Include="T_EyeDisease.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

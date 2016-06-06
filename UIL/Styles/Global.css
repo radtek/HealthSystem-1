@@ -1,0 +1,465 @@
+﻿*
+{
+	margin: 0;
+	padding: 0;
+}
+html
+{
+	height: 100%;
+	overflow: hidden;
+	font-family: 宋体;
+	font-size: 12px;
+}
+body
+{
+	height: 100%;
+	overflow: hidden;
+}
+A:link
+{
+	color: #0066CC;
+	text-decoration: none;
+}
+A:active
+{
+	color: #FF0000;
+	text-decoration: none;
+}
+A:visited
+{
+	color: #0066CC;
+	text-decoration: none;
+}
+A:hover
+{
+	color: #FF3300;
+	text-decoration: underline;
+}
+ul
+{
+	clear: both;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+input, textarea
+{
+	font-family: Arial,宋体;
+	border: 1px solid #CCCCCC;
+	height: 23px;
+	background: url(../Images/Input.png);
+	background-repeat: repeat-x;
+	line-height: 23px;
+	font-size: 12px;
+	padding-left: 3px;
+	padding-right: 3px;
+	color: #666666;
+}
+select
+{
+	font-family: Arial,宋体;
+	border: 1px solid #CCCCCC;
+	height: 25px;
+	background: url(../Images/Input.png);
+	background-repeat: repeat-x;
+	font-size: 12px;
+	line-height: 23px;
+	padding: 2px;
+	color: #666666;
+}
+input:focus, select:focus, textarea:focus
+{
+	outline: 1px solid #B3DD96;
+	border: 1px solid #57982B;
+	color: #336600;
+}
+.Label
+{
+	font-family: Arial,宋体;
+	background: url(../Images/LabelBG.png);
+	min-height: 23px;
+	line-height: 23px;
+	font-size: 12px;
+	padding-left: 3px;
+	padding-right: 3px;
+	color: #666666;
+}
+.ReadOnly
+{
+	border: 1px solid #CCCCCC;
+	height: 23px;
+	background: url(../Images/Input.png);
+	background-repeat: repeat-x;
+	line-height: 23px;
+	font-size: 12px;
+	padding-left: 3px;
+	padding-right: 3px;
+	color: #666666;
+}
+.ReadOnly:focus
+{
+	outline: 0px solid #B3DD96;
+	border: 1px solid #CCCCCC;
+	color: #666666;
+}
+#Header
+{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	right: 0px;
+	height: 85px;
+	background: url(../Images/HeaderBG.png);
+}
+#SideBar
+{
+	position: absolute;
+	left: 0px;
+	top: 85px;
+	bottom: 0px;
+	width: 160px;
+	overflow: hidden;
+	background: url(../Images/SideBarBG.png);
+}
+#Content
+{
+	position: absolute;
+	left: 160px;
+	top: 85px;
+	bottom: 0px;
+	right: 0px;
+	background-color: white;
+}
+#ScorllArea
+{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	bottom: 50px;
+	right: 0px;
+	overflow: auto;
+	padding: 20px;
+}
+#ScorllFooter
+{
+	height: 20px;
+}
+#CompanyLogo
+{
+	background: url(../images/CompanyLogo.png) no-repeat;
+	width: 200px;
+	height: 20px;
+	top: 0px;
+	position: absolute;
+}
+#Logo
+{
+	background: url(../images/Logo.png) no-repeat;
+	width: 400px;
+	height: 45px;
+	top: 20px;
+	position: absolute;
+}
+#DesignerLogo
+{
+	background: #669900;
+	background: url(../images/DesignerLogo.png) no-repeat;
+	height: 50px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	position: absolute;
+}
+#Footer
+{
+	background: url(../Images/FooterBG.png);
+	height: 50px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	position: absolute;
+}
+.ButtonArea
+{
+	left: 0px;
+	right: 20px;
+	top: 13px;
+	position: absolute;
+	text-align: right;
+}
+.BarAreaTop
+{
+	border-top: 1px #999999 solid;
+	height: auto;
+	left: 2px;
+	right: 5px;
+	position: absolute;
+}
+.BarAreaBottom
+{
+	border-top: 1px #999999 solid;
+	height: auto;
+	left: 2px;
+	bottom: 50px;
+	right: 5px;
+	position: absolute;
+}
+.NavBar
+{
+	background: url(../Images/NavBarBG01.png);
+	width: 100%;
+	height: 22px;
+	color: #666666;
+	text-align: center;
+	line-height: 21px;
+}
+.NavBar:hover
+{
+	background: url(../Images/NavBarBG02.png);
+	width: 100%;
+	height: 22px;
+	color: #666666;
+	text-align: center;
+	line-height: 21px;
+	cursor: pointer;
+}
+.NavBtn
+{
+	width: 100%;
+	height: 55px;
+	text-align: center;
+	vertical-align: bottom;
+}
+.NavBtnImg
+{
+	border: 0px none;
+	top: 12px;
+	position: relative;
+	cursor: pointer;
+}
+.NavBtnImg:hover
+{
+	background: url(../Images/NavBtnBG.png);
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	border-top-color: #FFFFFF;
+	border-right-color: #999999;
+	border-bottom-color: #999999;
+	border-left-color: #FFFFFF;
+	cursor: pointer;
+	top: 12px;
+	position: relative;
+}
+.NavBtnText
+{
+	color: #444444;
+	line-height: 15px;
+	text-align: center;
+}
+.Button
+{
+	width: 80px;
+	height: 24px;
+	border: 1px solid #87a3c1;
+	background: url(../Images/ButtonBG01.png);
+	color: #555;
+	font-size: 12px;
+	line-height: 22px;
+	cursor: pointer;
+}
+.Button:hover
+{
+	width: 80px;
+	height: 24px;
+	border: 1px solid #a2904d;
+	background: url(../Images/ButtonBG02.png);
+	color: #630;
+	font-size: 12px;
+	cursor: pointer;
+	line-height: 22px;
+	cursor: pointer;
+}
+.BtnView
+{
+	width: 90px;
+	height: 20px;
+	border: 1px solid #87a3c1;
+	background: url(../Images/BtnView.png);
+	cursor: pointer;
+	line-height: 22px;
+	vertical-align: middle;
+}
+.BtnView:hover
+{
+	width: 90px;
+	height: 20px;
+	border: 1px solid #a2904d;
+	background: url(../Images/BtnView02.png);
+	cursor: pointer;
+	line-height: 22px;
+	vertical-align: middle;
+}
+.BtnModify
+{
+	width: 50px;
+	height: 20px;
+	border: 1px solid #87a3c1;
+	background: url(../Images/BtnModify.png);
+	cursor: pointer;
+	line-height: 22px;
+	vertical-align: middle;
+}
+.BtnModify:hover
+{
+	width: 50px;
+	height: 20px;
+	border: 1px solid #a2904d;
+	background: url(../Images/BtnModify02.png);
+	cursor: pointer;
+	line-height: 22px;
+	vertical-align: middle;
+}
+.BtnDelete
+{
+	width: 50px;
+	height: 20px;
+	border: 1px solid #87a3c1;
+	background: url(../Images/BtnDelete.png);
+	cursor: pointer;
+	line-height: 22px;
+	vertical-align: middle;
+}
+.BtnDelete:hover
+{
+	width: 50px;
+	height: 20px;
+	border: 1px solid #a2904d;
+	background: url(../Images/BtnDelete02.png);
+	cursor: pointer;
+	line-height: 22px;
+	vertical-align: middle;
+}
+.TextSearch
+{
+	width: 200px;
+	height: 19px;
+	color: #666666;
+	line-height: 21px;
+	border: 1px solid #CCCCCC;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+.TextJumpPage
+{
+	width: 30px;
+	height: 19px;
+	color: #666666;
+	text-align: center;
+	line-height: 21px;
+	border: 1px solid #CCCCCC;
+}
+.ListArea
+{
+	min-width: 800px;
+	width: 100%;
+	overflow: inherit;
+	height: 80px;
+}
+.ListSide
+{
+	float: left;
+	width: 80px;
+	margin-right: 10px;
+}
+.ListContent
+{
+	color: #666666;
+	min-width: 600px;
+}
+.SearchBar
+{
+	float: left;
+}
+.SearchBar li
+{
+	text-align: center;
+	min-width: 25px;
+	line-height: 21px;
+	float: left;
+}
+.PageBar
+{
+	float: right;
+	font-family: Arial,宋体;
+}
+.PageBar li
+{
+	text-align: center;
+	min-width: 25px;
+	line-height: 21px;
+	float: left;
+}
+.InfoArea
+{
+	min-width: 800px;
+	width: 100%;
+	border: 1px solid #CCCCCC;
+	min-height: 400px;
+	height: auto;
+	overflow: auto;
+}
+.InfoHeader
+{
+	color: #999999;
+	width: 100%;
+	border-bottom: 1px solid #CCCCCC;
+	height: 25px;
+	background: url(../Images/TableHeaderBG.png);
+	line-height: 25px;
+	font-weight: bold;
+	text-indent: 5px;
+}
+.InfoSide
+{
+	float: left;
+	width: 100px;
+	margin: 20px;
+}
+.InfoContent
+{
+	margin: 20px;
+	color: #666666;
+	overflow: inherit;
+}
+.TableData
+{
+	font-family: Arial,宋体;
+	width: 100%;
+	border: 1px solid #CCCCCC;
+	border-collapse: collapse;
+	background: #FFFFFF;
+	color: #666666;
+	word-wrap: break-word;
+}
+.TableHeader
+{
+	height: 30px;
+	text-align: center;
+	background: url(../Images/TableHeaderBG.png);
+}
+.TableRow
+{
+	height: 30px;
+}
+.TableData td
+{
+	border: 1px solid #CCCCCC;
+	padding: 0px 5px 0px 5px;
+	line-height: 20px;
+}

@@ -1,0 +1,5 @@
+﻿@{
+    MajorProblemDATAJSON mpd = new MajorProblemDATAJSON();
+    string result = "{\"total\":\"" + mpd.dataToJson().count + "\",\"rows\":" + mpd.dataToJson().data + "}";
+    Response.Write(result);
+}

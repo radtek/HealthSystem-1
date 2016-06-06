@@ -1,0 +1,6 @@
+﻿@{
+    BasicExamDATAJSON bed = new BasicExamDATAJSON();
+    string data = bed.dataToJson(Request["dataUser"].Trim());
+    //string data = bed.dataToJson("李国伟");
+    Response.Write(data);
+}

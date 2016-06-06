@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4A7A9778-74A0-4D49-9806-9BDD6C3F1259}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Zhbit.HealthSystem.DAL</RootNamespace>
+    <AssemblyName>DAL</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\DoctorDAL.cs" />
+    <Compile Include="OleDb\DoctorDAL.cs" />
+    <Compile Include="Oracle\DoctorDAL.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Common\ResidentDAL.cs" />
+    <Compile Include="SqlServer\DoctorDAL.cs" />
+    <Compile Include="SqlServer\ResidentDAL.cs" />
+    <Compile Include="Oracle\ResidentDAL.cs" />
+    <Compile Include="OleDb\ResidentDAL.cs" />
+    <Compile Include="Common\ResidentDiseaseInfoDAL.cs" />
+    <Compile Include="SqlServer\ResidentDiseaseInfoDAL.cs" />
+    <Compile Include="Oracle\ResidentDiseaseInfoDAL.cs" />
+    <Compile Include="OleDb\ResidentDiseaseInfoDAL.cs" />
+    <Compile Include="Common\FamilyDAL.cs" />
+    <Compile Include="SqlServer\FamilyDAL.cs" />
+    <Compile Include="Oracle\FamilyDAL.cs" />
+    <Compile Include="OleDb\FamilyDAL.cs" />
+    <Compile Include="Common\InstitutionsDAL.cs" />
+    <Compile Include="SqlServer\InstitutionsDAL.cs" />
+    <Compile Include="Oracle\InstitutionsDAL.cs" />
+    <Compile Include="OleDb\InstitutionsDAL.cs" />
+    <Compile Include="Common\ManagerDAL.cs" />
+    <Compile Include="SqlServer\ManagerDAL.cs" />
+    <Compile Include="Oracle\ManagerDAL.cs" />
+    <Compile Include="OleDb\ManagerDAL.cs" />
+    <Compile Include="Common\BloodOxygenDAL.cs" />
+    <Compile Include="SqlServer\BloodOxygenDAL.cs" />
+    <Compile Include="Oracle\BloodOxygenDAL.cs" />
+    <Compile Include="OleDb\BloodOxygenDAL.cs" />
+    <Compile Include="Common\PressureDAL.cs" />
+    <Compile Include="SqlServer\PressureDAL.cs" />
+    <Compile Include="Oracle\PressureDAL.cs" />
+    <Compile Include="OleDb\PressureDAL.cs" />
+    <Compile Include="Common\TemperatureDAL.cs" />
+    <Compile Include="SqlServer\TemperatureDAL.cs" />
+    <Compile Include="Oracle\TemperatureDAL.cs" />
+    <Compile Include="OleDb\TemperatureDAL.cs" />
+    <Compile Include="Common\BasicExaminationDAL.cs" />
+    <Compile Include="SqlServer\BasicExaminationDAL.cs" />
+    <Compile Include="Oracle\BasicExaminationDAL.cs" />
+    <Compile Include="OleDb\BasicExaminationDAL.cs" />
+    <Compile Include="Common\AdvancedExaminationDAL.cs" />
+    <Compile Include="SqlServer\AdvancedExaminationDAL.cs" />
+    <Compile Include="Oracle\AdvancedExaminationDAL.cs" />
+    <Compile Include="OleDb\AdvancedExaminationDAL.cs" />
+    <Compile Include="Common\MajorProblemsDAL.cs" />
+    <Compile Include="SqlServer\MajorProblemsDAL.cs" />
+    <Compile Include="Oracle\MajorProblemsDAL.cs" />
+    <Compile Include="OleDb\MajorProblemsDAL.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SFL\SFL.csproj">
+      <Project>{D530F0B3-79C3-4305-89C1-F4BFF271BA62}</Project>
+      <Name>SFL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{0AB28C3E-8E70-4CE2-83F5-4FD28150BCB1}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

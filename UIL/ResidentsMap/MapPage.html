@@ -1,0 +1,533 @@
+﻿<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>养老院检测系统</title>
+    <link href="../Styles/Map/style.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../Scripts/Map/jquery-2.2.3.min.js"></script>
+    <script type="text/javascript" src="../Scripts/Map/jquery.rotate.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ipeightQ6MQ6j7NZkVyyqMW5"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/CurveLine/1.5/src/CurveLine.min.js"></script>
+</head>
+<body>
+    <div id="trigger">&gt;</div>
+    <div id="info">
+        &nbsp;&nbsp;&nbsp;&nbsp;<div id="col1">老人院服务质量排行</div>&nbsp;&nbsp;&nbsp;&nbsp;
+        <!--<div id="col2">最热路线</div>-->
+        <div id="detail">
+            <ul class="resList">
+                <li class="resource" id="city1"></li>
+                <li class="resource" id="city2"></li>
+                <li class="resource" id="city3"></li>
+                <li class="resource" id="city4"></li>
+                <li class="resource" id="city5"></li>
+                <li class="resource" id="city6"></li>
+                <li class="resource" id="city7"></li>
+            </ul>
+            <ul class="hotList"></ul>
+        </div>
+    </div>
+    <div id="allmap"></div>
+    <div id="frame">
+        <div id='title'><p></p></div>
+        <div id="cancel"><p>X</p></div>
+        <div id='heartbeat'><p>心跳：</p></div>
+        <div id='bloodSystolic'><p>收缩率：</p></div>
+        <div id='bloodDiastolic'><p>舒张率：</p></div>
+    </div>
+</body>
+<script type="text/javascript">
+    // 百度地图API功能
+    var map = new BMap.Map("allmap");    // 创建Map实例
+    map.centerAndZoom(new BMap.Point(108.36, 36.506),5);  // 初始化地图,设置中心点坐标和地图级别
+    map.addControl(new BMap.MapTypeControl()); //添加地图类型控件
+    map.enableScrollWheelZoom(true);
+    //位置标记结构体
+    Point = {
+        onX:0,
+        onY:0,
+        outX:0,
+        outY:0,
+        x:0,
+        y:0,
+        disX:0,
+        disY:0,
+        tempX:0,
+        tempY:0,
+        maxY:0
+    };
+//    map.setCurrentCity("北京");          // 设置地图显示的城市 此项是必须设置的
+    //参数
+    map.setMapStyle({
+        styleJson:[
+            {
+                "featureType": "water",
+                "elementType": "all",
+                "stylers": {
+                   /* "color": "#343a48",*/
+                    "visibility": "on"
+                }
+            },
+            {
+                "featureType": "boundary",
+                "elementType": "all",
+                "stylers": {
+                   /* "color": "#616d83",*/
+                    "weight": "0.85"
+                }
+            },
+            {
+                "featureType": "land",
+                "elementType": "all",
+                "stylers": {
+                    /*"color": "#585d70"*/
+                }
+            },
+            {
+                "featureType": "highway",
+                "elementType": "all",
+                "stylers": {
+                    "visibility": "off"
+                }
+            },
+            {
+                "featureType": "arterial",
+                "elementType": "all",
+                "stylers": {
+                    "visibility": "off"
+                }
+            },
+            {
+                "featureType": "local",
+                "elementType": "all",
+                "stylers": {
+                    "visibility": "off"
+                }
+            },
+            {
+                "featureType": "administrative",
+                "elementType": "labels.text.fill",
+                "stylers": {
+                    "visibility": "off"
+                }
+            },
+            {
+                "featureType": "poi",
+                "elementType": "all",
+                "stylers": {
+                    "visibility": "off"
+                }
+            },
+            {
+                "featureType": "road",
+                "elementType": "all",
+                "stylers": {
+                    "visibility": "off"
+                }
+            },
+            {
+                "featureType": "green",
+                "elementType": "geometry",
+                "stylers": {
+                    "visibility": "off"
+                }
+            },
+            {
+                "featureType": "poi",
+                "elementType": "all",
+                "stylers": {
+                    "visibility": "off"
+                }
+            }
+        ]
+    });
+    //取消显示信息框
+    var cancel = document.getElementById("cancel");
+    cancel.addEventListener("click",function(){
+        document.getElementById("frame").style.display = "none";
+    });
+    //捕获移动前距离
+    document.getElementById("allmap").onmousedown = function(ev){
+
+        // 如果浏览器支持 pageYOffset, 通过 pageXOffset 和 pageYOffset 获取页面和视窗之间的距离
+        if(typeof window.pageYOffset != 'undefined') {
+            Point.onX = window.pageXOffset;
+            Point.onY = window.pageYOffset;
+        }
+        // 如果浏览器支持 compatMode, 并且指定了 DOCTYPE, 通过 documentElement 获取滚动距离作为页面和视窗间的距离
+        // IE 中, 当页面指定 DOCTYPE, compatMode 的值是 CSS1Compat, 否则 compatMode 的值是 BackCompat
+        else if(typeof document.compatMode != 'undefined' && document.compatMode != 'BackCompat') {
+            Point.onX = document.documentElement.scrollLeft;
+            Point.onY = document.documentElement.scrollTop;
+        }
+        // 如果浏览器支持 document.body, 可以通过 document.body 来获取滚动高度
+        else if(typeof document.body != 'undefined') {
+            Point.onX = document.body.scrollLeft;
+            Point.onY = document.body.scrollTop;
+        }
+        // 加上鼠标在视窗中的位置
+        Point.onX += ev.clientX;
+        Point.onY += ev.clientY;
+
+        console.log(Point.onX+"--"+Point.onY);
+    }
+    //捕获移动后距离
+    document.getElementById("allmap").onmouseup = function(ev){
+        // 如果浏览器支持 pageYOffset, 通过 pageXOffset 和 pageYOffset 获取页面和视窗之间的距离
+        if(typeof window.pageYOffset != 'undefined') {
+            Point.outX = window.pageXOffset;
+            Point.outY = window.pageYOffset;
+        }
+        // 如果浏览器支持 compatMode, 并且指定了 DOCTYPE, 通过 documentElement 获取滚动距离作为页面和视窗间的距离
+        // IE 中, 当页面指定 DOCTYPE, compatMode 的值是 CSS1Compat, 否则 compatMode 的值是 BackCompat
+        else if(typeof document.compatMode != 'undefined' && document.compatMode != 'BackCompat') {
+            Point.outX = document.documentElement.scrollLeft;
+            Point.outY = document.documentElement.scrollTop;
+        }
+        // 如果浏览器支持 document.body, 可以通过 document.body 来获取滚动高度
+        else if(typeof document.body != 'undefined') {
+            Point.outX = document.body.scrollLeft;
+            Point.outY = document.body.scrollTop;
+        }
+
+        // 加上鼠标在视窗中的位置
+        Point.outX += ev.clientX;
+        Point.outY += ev.clientY;
+
+//                console.log(Point.outX+"--"+Point.outY);
+
+        Point.disX = Point.outX - Point.onX;
+        Point.disY = Point.outY - Point.onY;
+
+        console.log("Distance:"+Point.disX+"--"+Point.disY);
+
+        Point.tempX = document.getElementById("frame").offsetLeft;
+        Point.tempY = document.getElementById("frame").offsetTop;
+
+        console.log("Temp:"+Point.tempX+"--"+Point.tempY);
+
+        var width = document.body.clientHeight;
+        Point.maxY = width - 273;
+        console.log("Width:"+Point.maxY);
+
+        var realX,realY;
+
+        realX = Point.tempX + Point.disX;
+        realY = Point.tempY +  Point.disY;
+
+        document.getElementById("frame").style.left = realX+"px";
+        document.getElementById("frame").style.top = realY+"px";
+    }
+    //城市数据初始化
+    var beijing=new BMap.Point(116.413554,39.911013),
+            shanghai=new BMap.Point(121.480237,31.2363054),
+            shenyang=new BMap.Point(121.4802372,41.8113391),
+            zhengzhou=new BMap.Point(113.631764,34.753432),
+            wuhan=new BMap.Point(114.311831,30.598428),
+            chengdu = new BMap.Point(104.0712161,30.576279),
+            guangzhou = new BMap.Point(113.270793,23.135308);
+    //记录点击的标记对象
+    var lat,lnt;
+    var cityName;
+    var cityID;
+    var cityPin;
+    var cityTo;
+    var cityFrom;
+    //城市对应表
+    citys = {
+        "id":[{"name":"北京"},
+            {"name":"上海"},
+            {"name":"沈阳"},
+            {"name":"郑州"},
+            {"name":"武汉"},
+            {"name":"成都"},
+            {"name":"广州"}]
+    };
+    //获取养老院详情
+    function detailForNurse(){
+        $.ajax({
+            type: "get",
+            url: "http://115.28.164.193/nurse/pointdetail.php?x="+lat+"&y="+lnt+"&id="+cityID,
+            dataType: "html",
+            success: function (data) {
+                map.clearOverlays();//清楚覆盖物
+                var dataObj = eval('(' + data + ')');
+                $.each(dataObj,function(n,value) {
+//                    alert(dataObj[n].x+dataObj[n].y)
+                    var point = new BMap.Point(dataObj[n].y,dataObj[n].x);
+                    $(".hotList").append("<p class='hot2'>陈伯："+"心跳："+dataObj[n].heartbeat+"收缩压："+dataObj[n].bloodSystolic+"舒张压："+dataObj[n].bloodDiastolic+"</p>");
+                    var marker = new BMap.Marker(point,{icon:new BMap.Icon("http://api.map.baidu.com/lbsapi/createmap/images/icon.png",new BMap.Size(20,25),{
+                        imageOffset: new BMap.Size(0,3)
+                    })});
+                    //添加标记
+                    map.addOverlay(marker);
+                    marker.addEventListener("click", function (e) {
+                        //恢复信息位置
+                        marker.onclick = function(ev){
+                            // 如果浏览器支持 pageYOffset, 通过 pageXOffset 和 pageYOffset 获取页面和视窗之间的距离
+                            if(typeof window.pageYOffset != 'undefined') {
+                                Point.x = window.pageXOffset;
+                                Point.y = window.pageYOffset;
+                            }
+                            // 如果浏览器支持 compatMode, 并且指定了 DOCTYPE, 通过 documentElement 获取滚动距离作为页面和视窗间的距离
+                            // IE 中, 当页面指定 DOCTYPE, compatMode 的值是 CSS1Compat, 否则 compatMode 的值是 BackCompat
+                            else if(typeof document.compatMode != 'undefined' && document.compatMode != 'BackCompat') {
+                                Point.x = document.documentElement.scrollLeft;
+                                Point.y = document.documentElement.scrollTop;
+                            }
+                            // 如果浏览器支持 document.body, 可以通过 document.body 来获取滚动高度
+                            else if(typeof document.body != 'undefined') {
+                                Point.x = document.body.scrollLeft;
+                                Point.y = document.body.scrollTop;
+                            }
+                            // 加上鼠标在视窗中的位置
+                            Point.x += ev.clientX;
+                            Point.y += ev.clientY;
+                            if (Point.y >= 357){
+                                Point.y = 340;
+                            }
+                            //信息显示位置
+                            var realX = Point.x + 10;
+                            var realY = Point.y + 10;
+//                alert("X:"+point.x+"Y:"+point.y);
+                            document.getElementById("frame").style.left = realX+"px";
+                            document.getElementById("frame").style.top = realY+"px";
+
+                            //修改信息栏的信息
+                            $("#title").text("我的身体状况   ");
+                            $("#heartbeat").text("心跳："+dataObj[0].heartbeat);
+                            $("#bloodSystolic").text("舒张度："+dataObj[0].bloodSystolic);
+                            $("#bloodDiastolic").text("收缩："+dataObj[0].bloodDiastolic);
+
+                            //展示信息框
+                            document.getElementById("frame").style.display = "block";
+
+                            // 返回鼠标在视窗中的位置
+                            return point;
+                        };
+                    });
+                });
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(errorThrown);
+            }
+        });
+    }
+    function addMapOverlay(){
+        var markers = [
+            {content:"省份",title:"北京市",imageOffset: {width:0,height:3},position:{lat:39.911013,lng:116.413554}},
+            {content:"省份",title:"上海市",imageOffset: {width:0,height:3},position:{lat:31.2363054,lng:121.480237}},
+            {content:"省份",title:"沈阳市",imageOffset: {width:0,height:3},position:{lat:41.8113391,lng:121.4802372}},
+            {content:"省份",title:"郑州市",imageOffset: {width:0,height:3},position:{lat:34.753432,lng:113.631764}},
+            {content:"省份",title:"武汉市",imageOffset: {width:0,height:3},position:{lat:30.598428,lng:114.311831}},
+            {content:"省份",title:"成都市",imageOffset: {width:0,height:3},position:{lat:30.576279,lng:104.0712161}},
+            {content:"省份",title:"广州市",imageOffset: {width:0,height:3},position:{lat:23.135308,lng:113.270793}}
+
+        ];
+        for(var index = 0; index < markers.length; index++ ){
+            var point = new BMap.Point(markers[index].position.lng,markers[index].position.lat);
+            var marker = new BMap.Marker(point,{icon:new BMap.Icon("http://api.map.baidu.com/lbsapi/createmap/images/icon.png",new BMap.Size(20,25),{
+                imageOffset: new BMap.Size(markers[index].imageOffset.width,markers[index].imageOffset.height)
+            })});
+            //添加标记
+            map.addOverlay(marker);
+            //绑定详情显示时间
+
+            marker.addEventListener("click", function (e) {
+//                alert("click");
+                var src = e.target || window.event.srcElement;
+                //e就是事件源对象,src是触发源对象，e.target是firefox的方法,window.event.srcElement是IE的方法
+                lat = src.HA.lat;
+                lnt = src.HA.lng;
+                console.log(src.HA.lat,src.HA.lng);
+                if(lat == 39.911013 && lnt == 116.413554 ){
+                    cityID = 0;
+                    cityName = "北京";
+                    cityPin = beijing;
+                    detailForNurse();
+                }
+                if(lat ==31.2363054 && lnt == 121.480237 ){
+                    cityID = 1;
+                    cityName = "上海";
+                    cityPin = shanghai;
+//                    alert("上海");
+                    detailForNurse();
+                }
+                if(lat == 41.8113391 && lnt == 121.4802372 ){
+                    cityID = 2;
+                    cityName = "沈阳";
+                    cityPin = shenyang;
+//                    alert("沈阳");
+                    detailForNurse();
+                }
+                if(lat == 34.753432 && lnt == 113.631764 ){
+                    cityID = 3;
+                    cityName = "郑洲";
+                    cityPin = zhengzhou;
+//                    alert("郑洲");
+                    detailForNurse();
+                }
+                if(lat == 30.598428 && lnt == 114.311831 ){
+                    cityID = 4;
+                    cityName = "武汉";
+                    cityPin = wuhan;
+//                    alert("武汉");
+                    detailForNurse();
+                }
+                if(lat == 30.576279 && lnt == 104.0712161 ){
+                    cityID = 5;
+                    cityName = "成都";
+                    cityPin = chengdu;
+//                    alert("成都");
+                    detailForNurse();
+                }
+                if(lat == 23.135308 && lnt == 113.270793){
+                    cityID = 6;
+                    cityName = "广州";
+                    cityPin = guangzhou;
+//                    alert("广州");
+                    detailForNurse();
+                }
+                //当前养老院标题
+//                $("#col1").text(cityName+"养老院信息");
+
+                //点击后放大地图
+                map.centerAndZoom(new BMap.Point(lnt,lat),8);
+                setTimeout(function(){
+                    map.setZoom(14);
+                }, 0);
+
+                //清除点生成子点
+
+
+                //个人信息框
+                $(".resource").hide();
+                $(".hot").hide();
+                $(".hot2").remove();
+            });
+        };
+    }
+    function showDetail(){
+        var src = e.target || window.event.srcElement;
+        //e就是事件源对象,src是触发源对象，e.target是firefox的方法,window.event.srcElement是IE的方法
+        lat = src.HA.lat;
+        lnt = src.HA.lng;
+        console.log(src.HA.lat,src.HA.lng);
+        if(lat == 39.911013 && lnt == 116.413554 ){
+            alert("北京");
+        }
+        if(lat == 31.236305 && lnt == 121.480237 ){
+            alert("上海");
+        }
+        if(lat == 41.811339 && lnt == 121.480237 ){
+            alert("沈阳");
+        }
+        if(lat == 34.753432 && lnt == 113.631764 ){
+            alert("郑洲");
+        }
+        if(lat == 30.5984283 && lnt == 114.311831 ){
+            alert("武汉");
+        }
+        if(lat == 30.576279 && lnt == 104.071216 ){
+            alert("成都");
+        }
+        if(lat == 23.135308 && lnt == 113.270793){
+            alert("广州");
+        }
+        document.getElementById("frame").style.display = "block";
+    }
+    addMapOverlay();
+
+//    信息栏ajax
+    function update(){
+
+        $.ajax({
+            type: "get",
+            url: "http://115.28.164.193/nurse/index.php",
+            dataType: "html",
+            success: function (data) {
+                var dataObj = eval('(' + data + ')');
+//                alert(dataObj[0]);
+                $("#city1").text("北京 "+"指数："+dataObj[0].mark+"  "+"人数："+dataObj[0].people);
+                $("#city2").text("上海 "+"指数："+dataObj[1].mark+"  "+"人数："+dataObj[1].people);
+                $("#city3").text("沈阳 "+"指数："+dataObj[2].mark+"  "+"人数："+dataObj[2].people);
+                $("#city4").text("郑州 "+"指数："+dataObj[3].mark+"  "+"人数："+dataObj[3].people);
+                $("#city5").text("武汉 "+"指数："+dataObj[4].mark+"  "+"人数："+dataObj[4].people);
+                $("#city6").text("成都 "+"指数："+dataObj[5].mark+"  "+"人数："+dataObj[5].people);
+                $("#city7").text("广州 "+"指数："+dataObj[6].mark+"  "+"人数："+dataObj[6].people);
+
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("error");
+            }
+        });
+    }
+//    //定时更新
+    setInterval(update, 500);
+
+    // 信息框
+    if (typeof jQuery == 'undefined') {
+        console.log('jQuery hasn\'t loaded');
+    } else {
+        console.log('jQuery has loaded');
+    }
+    function Resource(){
+        this.cityName = "beijing";
+        this.indexV = 9.8;
+        this.cpu = "98%";
+        this.memoryV = "80%";
+        this.bandwidth = "54%";
+    }
+    $("#col1").click(function () {
+        $(".resource").show();
+        $(".hot").hide();
+        $(".hot2").hide();
+        $(this).css('color','#DABE39');
+        $("#col2").css('color','rgb(119, 126, 133)');
+    });
+    $("#col2").click(function () {
+        $(".resource").hide();
+        $(".hot").show();
+        $(this).css('color','#DABE39');
+        $("#col1").css('color','rgb(119, 126, 133)');
+        $(".hot2").remove();
+    });
+    var num = 1;
+    var fb = 0;
+    $("#trigger").click(function () {
+        $("#info").toggle();
+        $(this).css('rotate',180*num);
+        if(fb == 0){
+            $(this).css("right","0px");
+            fb = 1;
+        } else {
+            $(this).css("right","301px");
+            fb = 0;
+        }
+        num++;
+    })
+</script>
+</html>
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />-->
+<!--<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />-->
+<!--<style type="text/css">-->
+<!--body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}-->
+<!--</style>-->
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ipeightQ6MQ6j7NZkVyyqMW5"></script>-->
+<!--<title>地图展示</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div id="allmap"></div>-->
+<!--</body>-->
+<!--</html>-->
+<!--<script type="text/javascript">-->
+<!--// 百度地图API功能-->
+<!--var map = new BMap.Map("allmap");    // 创建Map实例-->
+<!--map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);  // 初始化地图,设置中心点坐标和地图级别-->
+<!--map.addControl(new BMap.MapTypeControl());   //添加地图类型控件-->
+<!--map.setCurrentCity("北京");          // 设置地图显示的城市 此项是必须设置的-->
+<!--map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放-->
+<!--</script>-->

@@ -1,0 +1,5 @@
+﻿@{
+    InstitutionsSettingDATAJSON iis = new InstitutionsSettingDATAJSON();
+    string result = "{\"total\":\"" + iis.dataToJson().count + "\",\"rows\":" + iis.dataToJson().data + "}";
+    Response.Write(result);
+}

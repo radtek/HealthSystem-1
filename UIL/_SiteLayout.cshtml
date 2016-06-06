@@ -1,0 +1,410 @@
+﻿@using Zhbit.HealthSystem.BLL
+@using Zhbit.HealthSystem.DAL
+@using Zhbit.HealthSystem.Model
+@using Zhbit.HealthSystem.SFL
+@{ 
+    string loginname = "123123";
+    bool hasLogin = false;
+    if (Session["LoginIn"] != null)
+    {
+        hasLogin = (bool)Session["LoginIn"];
+    }
+    if (Session["Loginname"] != null)
+    {
+        loginname = Session["Loginname"] as string;
+    }
+    Manager mg = ManagerBLL.GetDataByLoginName(loginname);
+
+
+}
+<!DOCTYPE html>
+<html lang="zh">
+   <!-- head -->
+<head>
+    <title>@Page.title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="~/Public/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="~/Public/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/Public/myjs/control.js"></script>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" media="screen" href="~/Public/bootstrap/dist/css/bootstrap.min.css">
+
+    <!-- ace -->
+    <!-- <link rel="stylesheet" href="Public/ace/css/ace.min.css" /> -->
+    <!-- I change ace.css -->
+    <link rel="stylesheet" href="~/Public/ace/css/ace.css" />
+    <script src="~/Public/ace/js/ace-extra.min.js"></script>
+    <link rel="stylesheet" href="~/Public/font-awesome/4.2.0/css/font-awesome.min.css">
+    <!-- text fonts -->
+    <link rel="stylesheet" href="~/Public/fonts/fonts.googleapis.com.css" />
+
+    <!--For Bootstrap table-->
+    <script src="~/Public/bootstrap-table/src/bootstrap-table.js"></script>
+    <!-- for edite table data -->
+    <script src="~/Public/bootstrap-table/src/extensions/editable/bootstrap-table-editable.js"></script>
+    <script src="~/Public/bootstrap-table/linwaixiazai/bootstrap-editable.js"></script>
+    <link rel="stylesheet" href="~/Public/bootstrap-table/linwaixiazai/bootstrap-editable.css">
+    <!-- for export table data -->
+    <script src="~/Public/bootstrap-table/src/extensions/export/bootstrap-table-export.js"></script>
+    <script src="~/Public/bootstrap-table/tableExport.js"></script>
+    <!-- for mobile table  -->
+    <script src="~/Public/bootstrap-table/src/extensions/mobile/bootstrap-table-mobile.min.js"></script>
+    <!-- for Chinesize -->
+    <!-- <script src="~/Public/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script> -->
+
+    <link rel="stylesheet" href="~/Public/bootstrap-table/src/bootstrap-table.css">
+    <link rel="stylesheet" href="~/Public/mycss/index.css">
+    <!-- for toastr -->
+    <link href="~/Public/toastr/toastr.min.css" rel="stylesheet">
+    <script src="~/Public/toastr/toastr.min.js"></script>
+    <!-- for jquery-ui-timepicker-addon -->
+    <link rel="stylesheet" type="text/css" href="~/Public/jquery-ui-1.11.4.custom/jquery-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/Public/jquery-ui-1.11.4.custom/jquery-ui.theme.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/Public/jquery-ui-timepicker-addon/jquery-ui-timepicker-addon.min.css" />
+    <script type="text/javascript" src="~/Public/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="~/Public/jquery-ui-timepicker-addon/jquery-ui-timepicker-addon.min.js"></script>
+</head>
+    <body class="no-skin">
+    
+        <!--profile modal -->
+        <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="exampleModalLabel">欢迎! @mg.Name </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <form class="form-horizontal">
+                                <div class="form-group" style="display:none;">
+                                    <label for="mid" class="col-md-4 control-label">id:</label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="mid" value="@mg.Id">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="username" class="col-md-4 control-label">用户名:</label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="username" value="@mg.Name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="role" class="col-md-4 control-label">角色:</label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="role" value="@mg.Role">
+                                    </div>
+                                </div>
+                               
+                                <div class="form-group">
+                                    <label for="loginname" class="col-md-4 control-label">登录名:</label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="loginname" value="@mg.LoginName">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="newpassword" class="col-md-4 control-label">新密码:</label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="newpassword" >
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button id="modifyBtn" type="button" class="btn btn-primary">更改</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+@if (hasLogin)
+{
+        <script>
+
+                $(function(){
+   
+    $('#modifyBtn').click(function(event) {
+        event.preventDefault()
+        $.ajax({
+            url: "../UpdateManager.ashx",
+            type: 'post',
+            data: 'mid='+$('mid').val()+'&username=' + $('#username').val() + '&role=' + $('#role').val() + '&loginname=' + $('#loginname').val() + '&newpassword=' + $('#newpassword').val(),
+            dataType: 'json'
+        }).done(function(data, status, jqXHR){
+            console.log(data)
+            if (data == 1) {
+                toastr.success('Modify Success')
+                setTimeout(function(){
+                    location.href = "Main/MainPage.cshtml"
+                },4000)
+            } else if (data == 0) {
+                toastr.info('Modify Nothing')
+             } else {
+                toastr.error('Modify Failed')
+              }
+        }).fail(function(){
+            toastr.error('Network Communication Failure')
+        })
+
+    })
+})
+    
+        </script>
+        }
+        <!-- top nav -->
+        <div id="navbar" class="navbar navbar-default">
+            <script type="text/javascript">try{ace.settings.check('navbar' , 'fixed')}catch(e){}</script>
+            <div class="navbar-container" id="navbar-container">
+                <button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+                    <span class="sr-only">Toggle sidebar</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="navbar-header pull-left">
+                    <a href="index.html" class="navbar-brand">
+                        <small>
+                            <i class="fa fa-leaf"></i>
+                           智慧养老平台
+                        </small>
+                    </a>
+                </div>
+                <div class="navbar-buttons navbar-header pull-right" role="navigation">
+                    <ul class="nav ace-nav">
+                        <li class="light-blue pull-right">
+                            <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                                <img class="nav-user-photo" src="~/Public/avatars/niao2.png" alt="Jason's Photo" style="border:none;" />
+                                <span class="user-info">
+                                    <small>欢迎!</small>
+                                    @mg.Name
+                                </span> <i class="ace-icon fa fa-caret-down"></i>
+                            </a>
+                            <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                                <!--                         <li>
+                                <a href="#">
+                                    <i class="ace-icon fa fa-cog"></i>
+                                    Settings
+                                </a>
+                            </li>
+                            -->
+                                <li>
+                                    <!--   <a href="profile.html">
+                                    <i class="ace-icon fa fa-user"></i>
+                                    Profile
+                                </a>
+                                -->
+                                    <a id="profileBtn" tabindex="-1" href="#" data-toggle="modal" data-target="#profileModal">
+                                        <i class="ace-icon fa fa-user"></i>
+                                        设置
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <!-- <a href="#">
+                                    <i class="ace-icon fa fa-power-off"></i>
+                                    Logout
+                                </a>
+                                -->
+                                    <!-- <a tabindex="-1" href="__ROOT__/index.php/Login/exitLogin.html"> -->
+                                    <a tabindex="-1" href="">
+                                        <i class="ace-icon fa fa-power-off"></i>
+                                       注销
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="main-container" id="main-container">
+            <!-- left sidebar -->
+            <script type="text/javascript">
+            try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+            </script>
+            <div id="sidebar" class="sidebar responsive">
+                <script type="text/javascript">try{ace.settings.check('sidebar' , 'fixed')}catch(e){}</script>
+                <div class="sidebar-shortcuts" id="sidebar-shortcuts">
+                    <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+                        <button class="btn btn-success">
+                            <i class="ace-icon fa fa-signal"></i>
+                        </button>
+                        <button class="btn btn-info">
+                            <i class="ace-icon fa fa-pencil"></i>
+                        </button>
+                        <button class="btn btn-warning">
+                            <i class="ace-icon fa fa-users"></i>
+                        </button>
+                        <button class="btn btn-danger">
+                            <i class="ace-icon fa fa-cogs"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+                        <span class="btn btn-success"></span>
+                        <span class="btn btn-info"></span>
+                        <span class="btn btn-warning"></span>
+                        <span class="btn btn-danger"></span>
+                    </div>
+                </div>
+                <!-- /.sidebar-shortcuts -->
+                <ul class="nav nav-list">
+                    @*<volist name="menu" id="vo" key="val">
+                        <li <if condition="$nowSidebar['controller'].$nowSidebar['function'] eq $vo['controller'].$vo['function']">class="active"</if>>
+                        <a href="{:U($vo['controller'].'/'.$vo['function'])}">
+                            <i class="{$vo.ico}"></i><span class="menu-text">{$vo.title}</span>
+                        </a><b class="arrow"></b>
+                </li>
+                    </volist>*@
+                            <li class="active">
+                        <a href="~/Main/MainPage.cshtml">
+                            <i class="menu-icon fa fa-tachometer"></i>
+                            <span class="menu-text">主页</span>
+                        </a> <b class="arrow"></b>
+                    </li>
+                    <li class="">
+                        <a href="~/Family_management/Family_managementPage.cshtml">
+                            <i class="menu-icon fa fa-desktop"></i>
+                            <span class="menu-text">家庭管理</span>
+                        </a> <b class="arrow"></b>
+                    </li>
+                    <li class="">
+                        <a href="~/ResidentBasicManagement/ResidentBasicManagementPage.cshtml">
+                            <i class="menu-icon fa fa-desktop"></i>
+                            <span class="menu-text">老人信息</span>
+                        </a> <b class="arrow"></b>
+                    </li>
+                    <li class="">
+                        <a href="~/ResidentDiseaseInfoManagement/ResidentDiseaseInfoManagementPage.cshtml">
+                            <i class="menu-icon fa fa-desktop"></i>
+                            <span class="menu-text">老人疾病信息</span>
+                        </a> <b class="arrow"></b>
+                    </li>
+                    <li class="">
+                        <a href="~/ResidentsMap/ResidentsMapPage.cshtml">
+                            <i class="menu-icon fa fa-desktop"></i>
+                            <span class="menu-text">老人定位地图</span>
+                        </a> <b class="arrow"></b>
+                    </li>
+                    <li>
+                        <a href="#" class="dropdown-toggle">
+                            <i class="menu-icon fa fa-desktop"></i>
+                            <span class="menu-text"> 数据图表 </span>
+
+                            <b class="arrow icon-angle-down"></b>
+                        </a>
+
+                        <ul class="submenu">
+                            <li>
+                                <a href="~/QueryBloodOxygen/QueryBloodOxygenPage.cshtml">
+                                    <i class="icon-double-angle-right"></i>
+                                    血氧数据
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="~/QueryPressure/QueryPressurePage.cshtml">
+                                    <i class="icon-double-angle-right"></i>
+                                    血压数据
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="~/QueryTemperature/QueryTemperaturePage.cshtml">
+                                    <i class="icon-double-angle-right"></i>
+                                    体温数据
+                                </a>
+                            </li>
+
+                           
+                        </ul>
+                    </li>
+
+                   
+                    <li>
+                        <a href="#" class="dropdown-toggle">
+                            <i class="menu-icon fa fa-desktop"></i>
+                            <span class="menu-text"> 体检 </span>
+
+                            <b class="arrow icon-angle-down"></b>
+                        </a>
+
+                        <ul class="submenu">
+                            <li>
+                                <a href="~/BasicExam/BasicExamPage.cshtml">
+                                    <i class="icon-double-angle-right"></i>
+                                    基础体检
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="~/AdvancedExam/AdvancedExamPage.cshtml">
+                                    <i class="icon-double-angle-right"></i>
+                                    高级体检
+                                </a>
+                            </li>
+
+                           
+
+
+                        </ul>
+                    </li>
+                 
+                    <li class="">
+                        <a href="~/DoctorManagerment/DoctorManagermentPage.cshtml">
+                            <i class="menu-icon fa fa-list-alt"></i>
+                            <span class="menu-text">医生</span>
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="">
+                        <a href="~/AdministratorSettings/AdministratorSettingsPage.cshtml">
+                            <i class="menu-icon fa fa-calendar"></i>
+                            <span class="menu-text">管理员</span>
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="">
+                        <a href="~/Log/logoutPage.cshtml">
+                            <i class="menu-icon fa fa-calendar"></i>
+                            <span class="menu-text">退出系统</span>
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+                   
+                </ul>
+                <!-- /.nav-list -->
+                <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+                    <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+                </div>
+                <script type="text/javascript">try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}</script>
+            </div>
+            <div class="main-content">
+                @RenderBody();
+            </div>
+            <!-- footer -->
+            <div class="footer">
+                <div class="footer-inner">
+                    <div class="footer-content">
+                        <span class="bigger-120">
+                            <!-- <span class="blue bolder">Cloud Service Platform</span>
+                    -->
+                            &copy; 2016
+                            <a href="javascript:void(0)" target="_blank">智慧养老平台</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <!-- <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"> <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+    </a> -->
+            <script src="~/Public/ace/js/ace-elements.min.js"></script>
+            <script src="~/Public/ace/js/ace.min.js"></script>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,355 @@
+﻿@{
+    Layout = "~/_SiteLayout.cshtml";
+}
+
+<div class="main-content-inner">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}</script>
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="#">主页</a>
+            </li>
+            <li class="active">高级体检</li>
+        </ul>
+        <!-- /.breadcrumb -->
+        <!-- <div class="nav-search" id="nav-search">
+            <form class="form-search">
+                <span class="input-icon">
+                    <input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" /> <i class="ace-icon fa fa-search nav-search-icon"></i>
+                </span>
+            </form>
+        </div> -->
+        <!-- /.nav-search -->
+    </div>
+    <div class="page-content">
+        <!-- ace-settings-container -->
+        <div class="ace-settings-container" id="ace-settings-container">
+            <div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
+                <i class="ace-icon fa fa-cog bigger-130"></i>
+            </div>
+            <div class="ace-settings-box clearfix" id="ace-settings-box">
+                <div class="pull-left width-50">
+                    <div class="ace-settings-item">
+                        <div class="pull-left">
+                            <select id="skin-colorpicker" class="hide">
+                                <option data-skin="no-skin" value="#438EB9">#438EB9</option>
+                                <option data-skin="skin-1" value="#222A2D">#222A2D</option>
+                                <option data-skin="skin-2" value="#C6487E">#C6487E</option>
+                                <option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
+                            </select>
+                        </div>
+                        <span>&nbsp; Choose Skin</span>
+                    </div>
+                    <div class="ace-settings-item">
+                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-navbar" />
+                        <label class="lbl" for="ace-settings-navbar">Fixed Navbar</label>
+                    </div>
+                    <div class="ace-settings-item">
+                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-sidebar" />
+                        <label class="lbl" for="ace-settings-sidebar">Fixed Sidebar</label>
+                    </div>
+                    <div class="ace-settings-item">
+                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-breadcrumbs" />
+                        <label class="lbl" for="ace-settings-breadcrumbs">Fixed Breadcrumbs</label>
+                    </div>
+                    <div class="ace-settings-item">
+                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-rtl" />
+                        <label class="lbl" for="ace-settings-rtl">Right To Left (rtl)</label>
+                    </div>
+                    <div class="ace-settings-item">
+                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-add-container" />
+                        <label class="lbl" for="ace-settings-add-container">
+                            Inside <b>.container</b>
+                        </label>
+                    </div>
+                </div>
+                <!-- /.pull-left -->
+                <div class="pull-left width-50">
+                    <div class="ace-settings-item">
+                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-hover" />
+                        <label class="lbl" for="ace-settings-hover">Submenu on Hover</label>
+                    </div>
+                    <div class="ace-settings-item">
+                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-compact" />
+                        <label class="lbl" for="ace-settings-compact">Compact Sidebar</label>
+                    </div>
+                    <div class="ace-settings-item">
+                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-highlight" />
+                        <label class="lbl" for="ace-settings-highlight">Alt. Active Item</label>
+                    </div>
+                </div>
+                <!-- /.pull-left -->
+            </div>
+            <!-- /.ace-settings-box -->
+        </div>
+        <!-- /.ace-settings-container -->
+        <!--page-header-->
+        <div class="page-header">
+            <h1>
+                高级体检
+                <small>
+                    <i class="ace-icon fa fa-angle-double-right"></i>
+                    视图 &amp; 数据统计
+                </small>
+            </h1>
+        </div>
+        <!-- /.page-header -->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- PAGE CONTENT BEGINS -->
+                <!-- PAGE CONTENT ENDS -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-md-12">
+                <div id="toolbar">
+                    <button id="PlatformDeleteBtn" class="btn btn-default">Delete</button>
+                    <button id="PlatformAddBtn" class="btn btn-default" tabindex="-1" data-toggle="modal" data-target="#addModal">add</button>
+                </div>
+                <table id="DoctorManagementTable"></table>
+            </div>
+        </div>
+    </div>
+    <!-- /.page-content -->
+</div>
+<script>
+$(function() {
+    var count = 0
+    function rowStyle(row, index) {
+        var classes = ['active', 'success', 'info', 'warning', 'danger']
+
+        if (index % 2 === 0) {
+            count ++
+            if(count >= classes.length){
+                count = 0
+            }
+            return {
+                classes: classes[count]
+            }
+        }
+        return {}
+    }
+
+$('#DoctorManagementTable').bootstrapTable({
+        url: "GetAdvancedExam.ashx",
+        pagination: true,
+        pageSize: 4,
+        sidePagination: 'server',
+        pageList: [5, 10, 'ALL'],
+        search: true,
+        mobileResponsive: true,
+        striped: true,
+        rowStyle: rowStyle,
+        showColumns: true,
+        showRefresh: true,
+        showToggle: true,
+        showPaginationSwitch: true,
+        clickToSelect: true,
+        showExport: true,
+        exportTypes: ['json', 'xml', 'csv', 'txt', 'sql', 'doc', 'excel'],
+    
+//    /// <summary>[属性]检查编号</summary>
+//        public int? Id
+///// <summary>[属性]口腔</summary>
+//        public string Oral
+///// <summary>[属性]左眼视力</summary>
+//public decimal? LeftEye
+///// <summary>[属性]右眼视力</summary>
+//public decimal? RightEye
+///// <summary>[属性]听力</summary>
+//public string Hearing
+///// <summary>[属性]运动功能</summary>
+//public string FMA
+///// <summary>[属性]眼底</summary>
+//public string Fundus
+///// <summary>[属性]皮肤</summary>
+//public string Skin
+///// <summary>[属性]巩膜</summary>
+//public string Sclera
+///// <summary>[属性]淋巴结</summary>
+//public string LN
+///// <summary>[属性]肺功能</summary>
+//public string Lung
+///// <summary>[属性]心脏</summary>
+//public string Heart
+///// <summary>[属性]腹部</summary>
+//public string Abdomen
+///// <summary>[属性]下肢水肿</summary>
+//public string LowerExtremityEdema
+///// <summary>[属性]足背动脉搏动</summary>
+//public string DPAP
+///// <summary>[属性]肛门指诊</summary>
+//public string Dre
+///// <summary>[属性]空腹血糖</summary>
+//public string FBG
+///// <summary>[属性]血常规</summary>
+//public T_CBC CBC
+///// <summary>[属性]尿常规</summary>
+//public T_RoutineUrine RoutineUrine
+///// <summary>[属性]尿微量蛋白</summary>
+//public string U_MTB
+///// <summary>[属性]肝功能</summary>
+//public T_Liver Liver
+///// <summary>[属性]肾功能</summary>
+//public T_Renal Renal
+///// <summary>[属性]血脂</summary>
+//public T_TG TG
+///// <summary>[属性]糖化血红蛋白</summary>
+    //public string GHb
+    ///// <summary>[属性]乙型肝炎表面抗原</summary>
+//public string HBsAG
+///// <summary>[属性]心电图</summary>
+//public string ECG
+///// <summary>[属性]胸部Ｘ线片</summary>
+    //public string XRay
+    ///// <summary>[属性]B超</summary>
+//public string BUltrasonic
+///// <summary>[属性]宫颈涂片</summary>
+//public string CervicalSmear
+///// <summary>[属性]其他</summary>
+//public string Other
+///// <summary>[属性]体质</summary>
+//public string Physical
+///// <summary>[属性]保健指导意见</summary>
+//public string Guidance
+
+        columns: [{
+            field: 'Id',
+            title: '检查编号',
+            visible: true,//不可见，工具栏可见
+            switchable: true,//都不见
+            align: 'center'
+        }, {
+            field: 'Oral',
+            title: '口腔',
+            align: 'center'
+        }, {
+            field: 'LeftEye',
+            title: '左眼视力',
+            align: 'center'
+        }, {
+            field: 'RightEye',
+            title: '右眼视力',
+            align: 'center'
+        }, {
+            field: 'Hearing',
+            title: '听力',
+            align: 'center'
+        }, {
+            field: 'FMA',
+            title: '运动功能',
+            align: 'center'
+        }, {
+            field: 'Fundus',
+            title: '眼底',
+            align: 'center'
+        }, {
+            field: 'Skin',
+            title: '皮肤',
+            align: 'center'
+        }, {
+            field: 'Sclera',
+            title: '巩膜',
+            align: 'center'
+        }, {
+            field: 'LN',
+            title: '淋巴结',
+            align: 'center'
+        }, {
+            field: 'Lung',
+            title: '肺功能',
+            align: 'center'
+        }, {
+            field: 'Heart',
+            title: '心脏',
+            align: 'center'
+        }, {
+            field: 'Abdomen',
+            title: '腹部',
+            align: 'center'
+        }, {
+            field: 'LowerExtremityEdema',
+            title: '下肢水肿',
+            align: 'center'
+        }, {
+            field: 'DPAP',
+            title: '足背动脉搏动',
+            align: 'center'
+        }, {
+            field: 'Dre',
+            title: '肛门指诊',
+            align: 'center'
+        }, {
+            field: 'FBG',
+            title: '空腹血糖',
+            align: 'center'
+        }, {
+            field: 'CBC',
+            title: '血常规',
+            align: 'center'
+        }, {
+            field: 'RoutineUrine',
+            title: '尿常规',
+            align: 'center'
+        }, {
+            field: 'U_MTB',
+            title: '尿微量蛋白',
+            align: 'center'
+        }, {
+            field: 'Liver',
+            title: '肝功能',
+            align: 'center'
+        }, {
+            field: 'Renal',
+            title: '肾功能',
+            align: 'center'
+        }, {
+            field: 'TG',
+            title: '血脂',
+            align: 'center'
+        }, {
+            field: 'GHb',
+            title: '糖化血红蛋白',
+            align: 'center'
+        }, {
+            field: 'HBsAG',
+            title: '乙型肝炎表面抗原',
+            align: 'center'
+        }, {
+            field: 'ECG',
+            title: '心电图',
+            align: 'center'
+        }, {
+            field: 'XRay',
+            title: '胸部Ｘ线片',
+            align: 'center'
+        }, {
+            field: 'BUltrasonic',
+            title: 'B超',
+            align: 'center'
+        }, {
+            field: 'CervicalSmear',
+            title: '宫颈涂片',
+            align: 'center'
+        }, {
+            field: 'Other',
+            title: '其他',
+            align: 'center'
+        }, {
+            field: 'Physical',
+            title: '体质',
+            align: 'center'
+        }, {
+            field: 'Guidance',
+            title: '保健指导意见',
+            align: 'center'
+        }],
+
+    })
+
+
+})
+</script>
